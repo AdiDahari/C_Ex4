@@ -62,12 +62,12 @@ void printReversePreorder(node *n, char *s){
     if(n == NULL) return;
     s = realloc(s, strlen(s)+1);
     s[n->dist-1] = n->letter;
+    for (int i = NUM_LETTERS-1; i >= 0; i--){
+        printReversePreorder(n->children[i], s);
+    }
     if(n->count != 0){
         s[n->dist] = '\0';
         printf("%s %ld\n",s , n->count);
-    }
-    for (int i = NUM_LETTERS-1; i >= 0; i--){
-        printReversePreorder(n->children[i], s);
     }
 }
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[]){
     boolean flag = TRUE;
     do{
         char c = getchar();
-        if(c == ' ' || c == '\n' || c == EOF){
+        if(c == ' ' || c == '\n' || c == '\t' || c == EOF){
             word = realloc(word, (cnt+1)*sizeof(char));
             word[cnt] = '\0';
             insert(head, word);
