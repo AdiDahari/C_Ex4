@@ -4,6 +4,7 @@
 #include <ctype.h>
 #define NUM_LETTERS 26
 #define ALOCFAIL "Failed to allocate memory.\n"
+
 struct node *head;
 typedef enum {FALSE=0, TRUE=1} boolean;
 typedef struct node {
@@ -12,6 +13,7 @@ typedef struct node {
     struct node* children[NUM_LETTERS];
     int dist;
 } node;
+
 struct node* newNode(){
     struct node *new_node = (struct node*)malloc(sizeof(node));
     for(int i = 0; i < NUM_LETTERS; i++){
@@ -45,6 +47,7 @@ void insert(struct node *head, char s[]){
     n->count++;
     }
 }
+
 void printPreorder(node *n, char *s){
     if(n == NULL) return;
     s[n->dist] = n->letter;
