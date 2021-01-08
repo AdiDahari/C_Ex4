@@ -47,42 +47,49 @@ void insert(struct node *head, char s[]){
 }
 void printPreorder(node *n, char *s){
     if(n == NULL) return;
-    s = realloc(s, strlen(s)+1);
-    s[n->dist-1] = n->letter;
+    s[n->dist] = n->letter;
     if(n->count != 0){
-        s[n->dist] = '\0';
+        s[n->dist+1] = '\0';
         printf("%s %ld\n",s , n->count);
     }
     for (int i = 0; i < NUM_LETTERS; i++){
         printPreorder(n->children[i], s);
-    }  
+    }
 }
 
 void printReversePreorder(node *n, char *s){
     if(n == NULL) return;
-    s = realloc(s, strlen(s)+1);
-    s[n->dist-1] = n->letter;
+    s[n->dist] = n->letter;
     for (int i = NUM_LETTERS-1; i >= 0; i--){
         printReversePreorder(n->children[i], s);
     }
     if(n->count != 0){
-        s[n->dist] = '\0';
+        s[n->dist+1] = '\0';
         printf("%s %ld\n",s , n->count);
     }
 }
 
+void freeAll(node *head){
+    if(head == NULL) return;
+    for (int i = 0; i < NUM_LETTERS; i++){
+        freeAll(head->children[i]);
+    }
+    free(head);
+}
 
 int main(int argc, char *argv[]){
     head = (struct node*)malloc(sizeof(node));
-    char *word = (char*)malloc(sizeof(char));
+    head->dist = -1;
+    // head->dist = -1;
+    char *s = (char*)malloc(sizeof(char));
     int cnt = 0;
     boolean flag = TRUE;
     do{
         char c = getchar();
         if(c == ' ' || c == '\n' || c == '\t' || c == EOF){
-            word = realloc(word, (cnt+1)*sizeof(char));
-            word[cnt] = '\0';
-            insert(head, word);
+            s = realloc(s, (cnt+1)*sizeof(char));
+            s[cnt] = '\0';
+            insert(head, s);
             cnt = 0;
             if(c == EOF){
                 flag = FALSE;
@@ -91,15 +98,17 @@ int main(int argc, char *argv[]){
         }
         else if(isalpha(c)){
             c = tolower(c);
-            word = realloc(word, (cnt+1)*sizeof(char));
-            word[cnt++] = c;
+            s = realloc(s, (cnt+1)*sizeof(char));
+            s[cnt++] = c;
         }
     }while(flag);
-    char *s = (char*)malloc(sizeof(char));
     if(argc == 1){
-        printPreorder(head,s);
+        printPreorder(head, s);
     }
     else if(*argv[1] == 'r'){
         printReversePreorder(head, s);
     }
+    freeAll(head);
+    free(s);
+    return 0;
 }
