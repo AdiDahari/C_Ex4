@@ -16,6 +16,10 @@ typedef struct node {
 
 struct node* newNode(){
     struct node *new_node = (struct node*)malloc(sizeof(node));
+    if(new_node == NULL){
+        printf(ALOCFAIL);
+        exit(-1);
+    }
     for(int i = 0; i < NUM_LETTERS; i++){
         new_node->children[i] = NULL;
     }
@@ -82,15 +86,26 @@ void freeAll(node *head){
 
 int main(int argc, char *argv[]){
     head = (struct node*)malloc(sizeof(node));
+    if(head == NULL){
+        printf(ALOCFAIL);
+        exit(-1);
+    }
     head->dist = -1;
-    // head->dist = -1;
     char *s = (char*)malloc(sizeof(char));
+    if(s == NULL){
+        printf(ALOCFAIL);
+        exit(-1);
+    }
     int cnt = 0;
     boolean flag = TRUE;
     do{
         char c = getchar();
         if(c == ' ' || c == '\n' || c == '\t' || c == EOF){
             s = realloc(s, (cnt+1)*sizeof(char));
+            if(s == NULL){
+                printf(ALOCFAIL);
+                exit(-1);
+            }
             s[cnt] = '\0';
             insert(head, s);
             cnt = 0;
@@ -102,6 +117,10 @@ int main(int argc, char *argv[]){
         else if(isalpha(c)){
             c = tolower(c);
             s = realloc(s, (cnt+1)*sizeof(char));
+            if(s == NULL){
+                printf(ALOCFAIL);
+                exit(-1);
+            }
             s[cnt++] = c;
         }
     }while(flag);
